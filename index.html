@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MG Consultants - Software Center</title>
+<link rel="icon" href="logo.png">
+<style>
+:root{--bg:#eef3f8;--card:#fff;--text:#1b2733;--muted:#64748b;--line:#dde5ee;--ac:#0068aa;--ac2:#00518a}
+@media (prefers-color-scheme:dark){:root{--bg:#12161b;--card:#1c222a;--text:#e8edf2;--muted:#9aa7b6;--line:#2f3945;--ac:#2e8fd6;--ac2:#237bbb}}
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+header{display:flex;align-items:center;gap:14px;background:var(--card);padding:10px 20px;border-bottom:4px solid var(--ac)}
+header img{height:54px}header div{flex:1}header b{display:block;font-size:20px}header span{color:var(--muted);font-size:13px}
+main{max-width:980px;margin:0 auto;padding:22px 16px 50px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.narrow{max-width:400px;margin:40px auto}.narrow h2{margin:0 0 4px}
+input{width:100%;padding:12px;margin:6px 0;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--text);font-size:15px}
+button,a.btn{display:inline-block;padding:10px 18px;border:0;border-radius:9px;background:var(--ac);color:#fff;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none}
+button:hover,a.btn:hover{background:var(--ac2)}button.ghost{background:transparent;color:var(--ac);border:1px solid var(--ac)}button.red{background:#c62828}
+form button{width:100%;margin-top:8px}.muted{color:var(--muted)}.err{color:#c62828;min-height:20px}small{font-size:13px}a{color:var(--ac)}
+.hero{background:linear-gradient(135deg,var(--ac),#003f6b);color:#fff;border-radius:14px;padding:26px;margin-bottom:18px}
+.hero h2{margin:0 0 10px}.hero input{border:0;max-width:420px;background:#fff;color:#1b2733}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.app{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.15s}
+.app:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.12)}.app b{font-size:16px}.app .d{margin:0;font-size:13px;flex:1}.app a.btn{width:100%;margin-top:6px}
+.ic{width:64px;height:64px;border-radius:16px;object-fit:cover;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;flex:none}
+.help{margin-top:20px}.help h3{margin:0 0 6px}.help ol{margin:0;padding-left:22px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{width:auto}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--muted);cursor:pointer;margin-bottom:8px}.drop.over{border-color:var(--ac);color:var(--ac)}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}.row .ic{width:44px;height:44px;font-size:20px;border-radius:11px}.grow{flex:1;min-width:160px;word-break:break-word}.row b{display:block}
+.row button{padding:7px 12px}.two{display:flex;gap:8px}.two input{margin:0}.two button{width:auto;margin:0}
+</style></head><body>
+<header><img src="logo.png" alt="MG Consultants"><div><b>Software Center</b><span>MG Consultants IT</span></div><button id="outBtn" class="ghost" hidden>Sign out</button></header>
+<main>
+<section id="v-login" class="card narrow"><h2>Welcome</h2><p class="muted">Sign in to download company software.</p>
+ <form id="loginForm"><input id="lu" placeholder="Username" autocomplete="username" required><input id="lp" type="password" placeholder="Password" autocomplete="current-password" required><button>Sign in</button></form>
+ <p id="lmsg" class="err"></p><a href="#" id="toAdmin"><small>Admin sign in</small></a></section>
+
+<section id="v-admlogin" class="card narrow" hidden><h2>Admin sign in</h2><p class="muted">Paste your GitHub token. It is kept only in this browser tab.</p>
+ <form id="admForm"><input id="tk" type="password" placeholder="GitHub token" required><button>Connect</button></form>
+ <p id="amsg" class="err"></p><a href="#" id="toUser"><small>Back to user sign in</small></a></section>
+
+<section id="v-user" hidden>
+ <div class="hero"><h2 id="hello"></h2><input id="q" type="search" placeholder="Search software..."></div>
+ <div id="grid" class="grid"></div>
+ <div class="card help"><h3>How to install</h3><ol><li>Click <b>Download</b> on the software you need.</li><li>Open the downloaded file from your browser or <b>Downloads</b> folder.</li><li>If Windows asks for permission, click <b>Yes</b>.</li><li>Follow the steps on screen: <b>Next</b>, <b>Install</b>, <b>Finish</b>.</li></ol></div>
+</section>
+
+<section id="v-admin" hidden>
+ <div class="tabs"><button id="t1">Software</button><button id="t2" class="ghost">Users</button></div>
+ <div id="p1"><div class="card"><div id="drop" class="drop">Drag .exe / .msi files here, or click to choose</div><input id="file" type="file" multiple hidden><input id="ifile" type="file" accept="image/*" hidden><div id="ust" class="muted"></div></div>
+  <div class="card" style="margin-top:14px"><div id="slist"></div></div></div>
+ <div id="p2" hidden><div class="card"><h3 style="margin-top:0">Add user / reset password</h3>
+  <form id="uform" class="two"><input id="nu" placeholder="Username" required><input id="np" type="text" placeholder="Password (6+ characters)" required><button>Save</button></form></div>
+  <div class="card" style="margin-top:14px"><div id="ulist"></div></div></div>
+</section>
+</main>
+
+<script>
+// ===== IT: change these 3 values =====
+var OWNER = "testmu79-arch", REPO = "mggit", TAG = "software";
+// =====================================
+var $ = function (i) { return document.getElementById(i); };
+var data = { users: [], apps: {} }, assets = [], token = "", fileSha = null, rel = null, iconFor = null;
+
+function view(v) { ["login", "admlogin", "user", "admin"].forEach(function (x) { $("v-" + x).hidden = x !== v; }); $("outBtn").hidden = v === "login" || v === "admlogin"; }
+function hex(b) { return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join(""); }
+async function sha(s) { return hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s))); }
+function rnd() { return hex(crypto.getRandomValues(new Uint8Array(8))); }
+function fmt(b) { return b > 1073741824 ? (b / 1073741824).toFixed(1) + " GB" : b > 1048576 ? Math.round(b / 1048576) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; }
+function nice(f) { var n = f.replace(/\.[^.]+$/, "").replace(/_+/g, " ").trim(); return n.charAt(0).toUpperCase() + n.slice(1); }
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
+function btn(p, t, c, fn) { var b = el("button", c, t); b.onclick = fn; p.appendChild(b); return b; }
+function avatar(name, icon) {
+  if (icon) { var i = el("img", "ic"); i.src = icon; i.alt = ""; return i; }
+  var d = el("div", "ic", name.charAt(0).toUpperCase()), h = 0;
+  for (var k = 0; k < name.length; k++) h = (h * 31 + name.charCodeAt(k)) % 360;
+  d.style.background = "hsl(" + h + ",55%,45%)"; return d;
+}
+function norm() { data.users = data.users || []; data.apps = data.apps || {}; }
+
+// ---------- User side ----------
+var ready = (async function () {
+  try { var r = await fetch("data.json?t=" + Date.now()); if (r.ok) data = await r.json(); } catch (e) {}
+  norm();
+})();
+async function loadAssets() {
+  try { var c = JSON.parse(sessionStorage.getItem("mg-a") || "null"); if (c && Date.now() - c.t < 600000) { assets = c.a; return; } } catch (e) {}
+  var r = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + "/releases/tags/" + TAG);
+  if (!r.ok) throw Error(r.status);
+  assets = ((await r.json()).assets || []).map(function (a) { return { name: a.name, size: a.size, browser_download_url: a.browser_download_url }; });
+  try { sessionStorage.setItem("mg-a", JSON.stringify({ t: Date.now(), a: assets })); } catch (e) {}
+}
+async function enter(u) {
+  view("user"); $("hello").textContent = "Hello, " + u;
+  var g = $("grid"); g.innerHTML = ""; g.appendChild(el("p", "muted", "Loading..."));
+  try { await loadAssets(); } catch (e) { g.innerHTML = ""; g.appendChild(el("p", "err", "Could not load the software list. Please try again later.")); return; }
+  drawGrid();
+}
+function drawGrid() {
+  var q = $("q").value.toLowerCase(), g = $("grid"); g.innerHTML = "";
+  var list = assets.map(function (a) { var m = data.apps[a.name] || {}; return { a: a, name: m.name || nice(a.name), desc: m.desc || "", icon: m.icon || "" }; })
+    .filter(function (x) { return (x.name + " " + x.desc).toLowerCase().indexOf(q) > -1; })
+    .sort(function (p, r) { return p.name.toLowerCase() < r.name.toLowerCase() ? -1 : 1; });
+  if (!list.length) { g.appendChild(el("p", "muted", assets.length ? "Nothing found." : "No software available yet.")); return; }
+  list.forEach(function (x) {
+    var c = el("div", "app"); c.appendChild(avatar(x.name, x.icon)); c.appendChild(el("b", "", x.name));
+    c.appendChild(el("p", "muted d", x.desc || "Ready to install")); c.appendChild(el("small", "muted", fmt(x.a.size)));
+    var a = el("a", "btn", "Download"); a.href = x.a.browser_download_url; c.appendChild(a); g.appendChild(c);
+  });
+}
+$("q").oninput = drawGrid;
+$("loginForm").onsubmit = async function (e) {
+  e.preventDefault(); await ready;
+  var u = $("lu").value.trim().toLowerCase(), p = $("lp").value, rec = data.users.find(function (x) { return x.u === u; });
+  if (rec && await sha(rec.s + p) === rec.h) { sessionStorage.setItem("mg-user", u); $("lmsg").textContent = ""; $("lp").value = ""; enter(u); }
+  else $("lmsg").textContent = "Wrong username or password.";
+};
+$("outBtn").onclick = function () { sessionStorage.removeItem("mg-user"); token = ""; $("tk").value = ""; view("login"); };
+$("toAdmin").onclick = function (e) { e.preventDefault(); view("admlogin"); };
+$("toUser").onclick = function (e) { e.preventDefault(); view("login"); };
+ready.then(function () { var u = sessionStorage.getItem("mg-user"); if (u && data.users.some(function (x) { return x.u === u; })) enter(u); });
+
+// ---------- Admin side ----------
+async function api(p, o) {
+  o = o || {}; o.headers = Object.assign({ Authorization: "Bearer " + token, Accept: "application/vnd.github+json" }, o.headers || {});
+  return fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + p, o);
+}
+async function adminLoad() {
+  var r = await api("/releases/tags/" + TAG);
+  if (r.status === 401) throw Error("The token is not valid.");
+  if (!r.ok) throw Error("Release '" + TAG + "' not found, or the token has no access.");
+  rel = await r.json(); assets = rel.assets;
+  r = await api("/contents/data.json");
+  if (r.ok) { var j = await r.json(); fileSha = j.sha; data = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g, ""))))); } else fileSha = null;
+  norm();
+}
+async function save() {
+  var body = { message: "Update data", content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 1)))) };
+  if (fileSha) body.sha = fileSha;
+  var r = await api("/contents/data.json", { method: "PUT", body: JSON.stringify(body) });
+  if (!r.ok) throw Error("Save failed (" + r.status + ")");
+  fileSha = (await r.json()).content.sha;
+}
+async function persist(reload) { try { await save(); if (reload) await adminLoad(); renderAdmin(); } catch (e) { alert(e.message); } }
+
+function renderAdmin() {
+  var b = $("slist"); b.innerHTML = "";
+  if (!assets.length) b.appendChild(el("p", "muted", "No software yet. Upload your first file above."));
+  assets.forEach(function (a) {
+    var m = data.apps[a.name] || {}, nm = m.name || nice(a.name), r = el("div", "row");
+    r.appendChild(avatar(nm, m.icon));
+    var t = el("div", "grow"); t.appendChild(el("b", "", nm)); t.appendChild(el("small", "muted", a.name + " \u00B7 " + fmt(a.size) + (m.desc ? " \u00B7 " + m.desc : ""))); r.appendChild(t);
+    btn(r, "Edit", "ghost", function () {
+      var n = prompt("Display name:", nm); if (n === null) return;
+      var d = prompt("Short description:", m.desc || ""); if (d === null) return;
+      data.apps[a.name] = Object.assign({}, m, { name: n.trim(), desc: d.trim() }); persist();
+    });
+    btn(r, "Icon", "ghost", function () { iconFor = a.name; $("ifile").click(); });
+    btn(r, "Delete", "red", async function () {
+      if (!confirm("Delete " + nm + " permanently?")) return;
+      var x = await api("/releases/assets/" + a.id, { method: "DELETE" });
+      if (x.status !== 204) return alert("Delete failed (" + x.status + ")");
+      delete data.apps[a.name]; persist(true);
+    });
+    b.appendChild(r);
+  });
+  var u = $("ulist"); u.innerHTML = "";
+  if (!data.users.length) u.appendChild(el("p", "muted", "No users yet. Add the first one above."));
+  data.users.forEach(function (x) {
+    var r = el("div", "row"); r.appendChild(avatar(x.u)); r.appendChild(el("b", "grow", x.u));
+    btn(r, "Remove", "red", function () { if (!confirm("Remove user " + x.u + "?")) return; data.users = data.users.filter(function (y) { return y.u !== x.u; }); persist(); });
+    u.appendChild(r);
+  });
+}
+
+function makeIcon(file) {
+  return new Promise(function (res) {
+    var img = new Image(); img.onload = function () {
+      var c = document.createElement("canvas"); c.width = c.height = 96; var s = Math.min(img.width, img.height);
+      c.getContext("2d").drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, 96, 96); res(c.toDataURL("image/png"));
+    }; img.src = URL.createObjectURL(file);
+  });
+}
+$("ifile").onchange = async function (e) {
+  var f = e.target.files[0]; e.target.value = ""; if (!f || !iconFor) return;
+  data.apps[iconFor] = Object.assign({}, data.apps[iconFor] || {}, { icon: await makeIcon(f) }); persist();
+};
+
+function uploadOne(file) {
+  var line = el("div", "", file.name + " ..."); $("ust").appendChild(line);
+  return new Promise(function (done) {
+    var x = new XMLHttpRequest();
+    x.open("POST", rel.upload_url.replace(/\{.*$/, "") + "?name=" + encodeURIComponent(file.name));
+    x.setRequestHeader("Authorization", "Bearer " + token); x.setRequestHeader("Accept", "application/vnd.github+json"); x.setRequestHeader("Content-Type", "application/octet-stream");
+    x.upload.onprogress = function (e) { if (e.lengthComputable) line.textContent = file.name + " " + Math.round(100 * e.loaded / e.total) + "%"; };
+    x.onload = function () { line.textContent = file.name + (x.status === 201 ? " - uploaded." : x.status === 422 ? " - a file with this name already exists. Delete it first." : " - failed (" + x.status + ")."); done(); };
+    x.onerror = function () { line.textContent = file.name + " - blocked or connection failed."; done(); };
+    x.send(file);
+  });
+}
+async function uploadAll(files) { $("ust").innerHTML = ""; for (var i = 0; i < files.length; i++) await uploadOne(files[i]); await adminLoad(); renderAdmin(); }
+$("drop").onclick = function () { $("file").click(); };
+$("file").onchange = function (e) { uploadAll(Array.from(e.target.files)); e.target.value = ""; };
+$("drop").ondragover = function (e) { e.preventDefault(); this.className = "drop over"; };
+$("drop").ondragleave = function () { this.className = "drop"; };
+$("drop").ondrop = function (e) { e.preventDefault(); this.className = "drop"; uploadAll(Array.from(e.dataTransfer.files)); };
+
+$("uform").onsubmit = async function (e) {
+  e.preventDefault(); var u = $("nu").value.trim().toLowerCase(), p = $("np").value;
+  if (!/^[a-z0-9._-]{2,30}$/.test(u)) return alert("Username: 2-30 letters or numbers (no spaces).");
+  if (p.length < 6) return alert("Password must be at least 6 characters.");
+  var s = rnd(); data.users = data.users.filter(function (x) { return x.u !== u; }); data.users.push({ u: u, s: s, h: await sha(s + p) });
+  $("nu").value = ""; $("np").value = ""; persist();
+};
+$("t1").onclick = function () { $("p1").hidden = false; $("p2").hidden = true; $("t1").className = ""; $("t2").className = "ghost"; };
+$("t2").onclick = function () { $("p1").hidden = true; $("p2").hidden = false; $("t2").className = ""; $("t1").className = "ghost"; };
+$("admForm").onsubmit = async function (e) {
+  e.preventDefault(); token = $("tk").value.trim(); $("amsg").textContent = "";
+  try { await adminLoad(); view("admin"); renderAdmin(); } catch (x) { $("amsg").textContent = x.message; token = ""; }
+};
+</script></body></html>
